@@ -2,7 +2,7 @@
 cc._RF.push(module, 'b7b0fuwOx1D0Y23BjB3gt8y', 'Player', __filename);
 // scripts/Player.js
 
-"use strict";
+'use strict';
 
 // Learn cc.Class:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
@@ -17,11 +17,31 @@ cc._RF.push(module, 'b7b0fuwOx1D0Y23BjB3gt8y', 'Player', __filename);
 cc.Class({
     extends: cc.Component,
 
-    properties: {},
+    properties: {
+        moveDownDuration: 1
+    },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function onLoad() {
+
+        // this.node.runAction(cc.rotateBy(0.1,30));
+    },
+    start: function start() {},
+
+
+    // update (dt) {},
+
+    moveDown: function moveDown(postion) {
+        //移动结束
+        var finishAction = cc.callFunc(function () {
+            this.node.dispatchEvent(new cc.Event.EventCustom('playerReady', true));
+        }, this);
+
+        this.node.runAction(cc.sequence(new cc.moveTo(this.moveDownDuration, postion), finishAction));
+    },
+
+    move: function move(postion) {
 
         var animation = this.getComponent(cc.Animation);
         var animState = animation.play("playermove");
@@ -30,13 +50,25 @@ cc.Class({
         animState.wrapMode = cc.WrapMode.Loop;
         animState.repeatCount = Infinity;
 
-        // this.node.runAction(cc.rotateBy(0.1,30));
-    },
-    start: function start() {}
-}
+        var finishAction = cc.callFunc(function () {
 
-// update (dt) {},
-);
+            animState.stop();
+            this.node.dispatchEvent(new cc.Event.EventCustom('playerMoveOver', true));
+        }, this, animState);
+
+        return this.node.runAction(cc.sequence(new cc.moveBy(this.moveDownDuration, postion), finishAction));
+    },
+
+    moveAndFail: function moveAndFail(postion) {
+        //移动结束
+        var finishAction = cc.callFunc(function () {
+            this.node.dispatchEvent(new cc.Event.EventCustom('gameOver', true));
+        }, this);
+
+        this.node.runAction(cc.sequence(new cc.moveBy(this.moveDownDuration, postion), finishAction));
+    }
+
+});
 
 cc._RF.pop();
         }

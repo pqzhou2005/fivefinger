@@ -42,10 +42,13 @@ cc.Class({
             this.node.setScale(this.currentLength / this.node.height);
         }
     },
+
+
     stopStretch: function stopStretch() {
         //停止伸缩
         this.state = 1;
     },
+
     rotate: function rotate() {
 
         if (this.state == 0) {
@@ -54,12 +57,12 @@ cc.Class({
 
             var finishAction = cc.callFunc(function () {
 
-                this.node.dispatchEvent(new cc.Event.EventCustom('gameover', true));
+                this.node.dispatchEvent(new cc.Event.EventCustom('stickRotateOver', true));
 
                 // console.log(this);
             }, this);
 
-            this.node.runAction(cc.sequence(new cc.RotateBy(this.currentLength * this.rotateDuration / 100, 180), finishAction));
+            this.node.runAction(cc.sequence(new cc.RotateBy(this.currentLength * this.rotateDuration / 100, 90), finishAction));
         }
     },
     getCurrentLength: function getCurrentLength() {
@@ -74,7 +77,8 @@ cc.Class({
      */
     onCollisionEnter: function onCollisionEnter(other, self) {
         console.log('on collision enter');
-        this.node.stopAllActions();
+        // this.node.stopAllActions();
+
 
         // 碰撞系统会计算出碰撞组件在世界坐标系下的相关的值，并放到 world 这个属性里面
         var world = self.world;
