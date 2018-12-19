@@ -13,6 +13,7 @@ cc.Class({
 
     properties: {
         moveDownDuration : 1,
+        moveDuration : 1,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -31,20 +32,15 @@ cc.Class({
 
     // update (dt) {},
 
-    moveDown : function(postion) {
-         //移动结束
-         var finishAction = cc.callFunc(function () {
-            this.node.dispatchEvent( new cc.Event.EventCustom('playerReady', true));
-        },this);
-
-        this.node.runAction(cc.sequence(new cc.moveTo(this.moveDownDuration, postion),finishAction));  
+    moveDown : function(postion,callback,target) {
+        this.node.runAction(cc.sequence(new cc.moveTo(this.moveDownDuration, postion),cc.callFunc(callback,target)));  
     },
 
     move : function(postion) {
 
         var animation = this.getComponent(cc.Animation);
         var animState = animation.play("playermove");
-        // console.log(animState);
+
         animState.speed = 10;    
         animState.wrapMode = cc.WrapMode.Loop;
         animState.repeatCount = Infinity;
@@ -56,7 +52,7 @@ cc.Class({
 
         },this,animState);
 
-        return this.node.runAction(cc.sequence(new cc.moveBy(this.moveDownDuration, postion),finishAction));
+        return this.node.runAction(cc.sequence(new cc.moveBy(this.moveDuration, postion),finishAction));
     },  
 
     moveAndFail : function(postion) {
@@ -65,8 +61,12 @@ cc.Class({
            this.node.dispatchEvent( new cc.Event.EventCustom('gameOver', true));
        },this);
 
-       this.node.runAction(cc.sequence(new cc.moveBy(this.moveDownDuration, postion),finishAction));  
+       this.node.runAction(cc.sequence(new cc.moveBy(this.moveDuration, postion),finishAction));  
    },
+
+   getFooterPostion : function() {
+        return cc.v2(this.node.x,this.node.y-this.node.height/2);
+   }
     
 
 });

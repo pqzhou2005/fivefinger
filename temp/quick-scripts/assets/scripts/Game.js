@@ -2,7 +2,7 @@
 cc._RF.push(module, '71d3fvgmz1BMIy3ia+/4+gT', 'Game', __filename);
 // scripts/Game.js
 
-'use strict';
+"use strict";
 
 // Learn cc.Class:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
@@ -19,7 +19,7 @@ cc.Class({
 
     properties: {
 
-        minDistance: 10,
+        minDistance: 50,
 
         maxDistance: 500,
 
@@ -36,6 +36,16 @@ cc.Class({
         playerPrefab: {
             default: null,
             type: cc.Prefab
+        },
+
+        gameCamera: {
+            default: null,
+            type: cc.Node
+        },
+
+        scoreLabel: {
+            default: null,
+            type: cc.Label
         }
 
     },
@@ -44,45 +54,21 @@ cc.Class({
 
     onLoad: function onLoad() {
 
-        //开启碰撞系统
-        var manager = cc.director.getCollisionManager();
-        manager.enabled = true;
-
-        //生成指头
-        this.spawnFinger(cc.v2(0, 0));
-        this.currentDistance = this.random(this.minDistance, this.maxDistance);
-        this.spawnFinger(cc.v2(this.currentDistance, 0));
-
-        //指头准备结束，生成猴子
-        this.node.on('fingerReady', function () {
-            if (!cc.isValid(this.player)) {
-                this.spawnPlayer(cc.v2(0, 0));
-            } else {}
-        }, this);
-
-        //猴子准备结束，绑定触摸事件
-        this.node.on('playerReady', function () {
-            this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
-        }, this);
-
-        //棍子旋转结束，猴子开始移动
-        this.node.on('stickRotateOver', function () {
-
-            this.player.getComponent('Player').move(cc.v2(this.stick.getComponent("Stick").getCurrentLength(), 0));
-        }, this);
+        this.score = 0;
+        //生成第一个指头
+        this.spawnFisrtFinger();
 
         //猴子移动结束
         this.node.on('playerMoveOver', function () {
 
-            console.log(this.stick.getComponent("Stick").getCurrentLength());
-
-            console.log(this.currentDistance);
-
             if (Math.abs(this.currentDistance - this.stick.getComponent("Stick").getCurrentLength()) < this.finger.width / 2) {
 
-                console.log(Math.abs(this.currentDistance - this.stick.getComponent("Stick").getCurrentLength()));
-                console.log(this.finger.width / 2);
                 this.stick.destroy();
+                this.gameCamera.runAction(new cc.moveBy(1, cc.v2(this.currentDistance, 0)));
+                this.score += 1;
+                console.log(this.score);
+                this.scoreLabel.string = "Score:" + this.score;
+                this.spawnRandomFinger();
             } else {
                 this.player.getComponent('Player').moveAndFail(cc.v2(0, -this.node.height / 2));
             }
@@ -90,9 +76,7 @@ cc.Class({
 
         //游戏结束，切换场景
         this.node.on('gameOver', function (event) {
-            console.log('gameover.................................');
             event.stopPropagation();
-
             cc.director.loadScene('start');
         }, this);
     },
@@ -102,57 +86,79 @@ cc.Class({
     onTouchStart: function onTouchStart(event) {
 
         if (!cc.isValid(this.stick)) {
-
-            this.spawnStick(cc.v2(this.player.x + this.player.width / 2, this.player.y - this.player.height / 2));
+            this.spawnStick();
         } else {
-
-            this.stick.getComponent('Stick').rotate();
-
+            this.stick.getComponent('Stick').rotate(function () {
+                this.player.getComponent('Player').move(cc.v2(this.stick.getComponent("Stick").getCurrentLength(), 0));
+            }, this);
             this.node.off(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
         }
-
-        console.log(event);
     },
 
     // update (dt) {},
 
-    spawnStick: function spawnStick(postion) {
+    spawnStick: function spawnStick() {
         // 使用给定的模板在场景中生成一个新节点
         this.stick = cc.instantiate(this.stickPrefab);
         // 将新增的节点添加到 Canvas 节点下面
         this.node.addChild(this.stick);
 
+        var postion = this.player.getComponent("Player").getFooterPostion();
+        postion.x = this.lastFinger.x;
         this.stick.setPosition(postion);
     },
 
-    spawnFinger: function spawnFinger(postion) {
+    //生成第一个指头和猴头
+    spawnFisrtFinger: function spawnFisrtFinger() {
+        this.fisrtFinger = this.finger = cc.instantiate(this.fingerPrefab);
+        this.node.addChild(this.fisrtFinger);
 
-        this.finger = cc.instantiate(this.fingerPrefab);
-        if (!cc.isValid(this.firstFinger)) this.firstFinger = this.finger;
+        var postion = cc.v2(0, 0);
+        postion.x -= this.node.width / 2 - this.fisrtFinger.width / 2;
+        postion.y -= this.node.height / 2 + this.fisrtFinger.height / 2;
 
-        this.node.addChild(this.finger);
-
-        postion.x -= this.node.width / 2 - this.finger.width / 2;
-        postion.y -= this.node.height / 2 + this.finger.height / 2;
-
-        this.finger.setPosition(postion);
-
-        this.finger.getComponent("Finger").moveUp();
+        this.fisrtFinger.setPosition(postion);
+        this.fisrtFinger.getComponent("Finger").moveUp(function () {
+            this.spawnPlayer();
+        }, this);
     },
 
-    spawnPlayer: function spawnPlayer(postion) {
+    //生成第二个指头
+    spawnRandomFinger: function spawnRandomFinger() {
+
+        this.currentDistance = this.random(this.minDistance, this.maxDistance);
+
+        this.lastFinger = this.finger;
+        this.finger = cc.instantiate(this.fingerPrefab);
+        this.node.addChild(this.finger);
+
+        var postion = cc.v2(0, 0);
+        postion.x = this.lastFinger.x + this.currentDistance;
+        postion.y -= this.node.height / 2 + this.fisrtFinger.height / 2;
+
+        this.finger.setPosition(postion);
+        this.finger.getComponent("Finger").moveUp(function () {
+            this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
+        }, this);
+    },
+
+    //生成猴头
+    spawnPlayer: function spawnPlayer() {
 
         this.player = cc.instantiate(this.playerPrefab);
         this.node.addChild(this.player);
 
-        postion.x = this.firstFinger.x;
+        var postion = cc.v2(0, 0);
+        postion.x = this.fisrtFinger.x;
         postion.y = this.node.height / 2;
 
         this.player.setPosition(postion);
-
-        this.player.getComponent("Player").moveDown(cc.v2(postion.x, -this.node.height / 2 + this.firstFinger.height + this.player.height / 2));
+        this.player.getComponent("Player").moveDown(cc.v2(postion.x, -this.node.height / 2 + this.fisrtFinger.height + this.player.height / 2), function () {
+            this.spawnRandomFinger();
+        }, this);
     },
 
+    //随机
     random: function random(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }

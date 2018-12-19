@@ -12,26 +12,30 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        
-        moveUpDuration: 2,
+        // foo: {
+        //     // ATTRIBUTES:
+        //     default: null,        // The default value will be used only when the component attaching
+        //                           // to a node for the first time
+        //     type: cc.SpriteFrame, // optional, default is typeof default
+        //     serializable: true,   // optional, default is true
+        // },
+        // bar: {
+        //     get () {
+        //         return this._bar;
+        //     },
+        //     set (value) {
+        //         this._bar = value;
+        //     }
+        // },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-
-    },
+    // onLoad () {},
 
     start () {
 
     },
 
-    update (dt) {
-        
-    },
-
-    moveUp: function(callback,target) {
-        this.node.runAction(cc.sequence(new cc.moveBy(this.moveUpDuration, cc.v2(0, this.node.height)),cc.callFunc(callback,target)));    
-    },
-    
+    // update (dt) {},
 });

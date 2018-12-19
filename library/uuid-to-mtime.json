@@ -120,8 +120,8 @@
     "relativePath": "texttures"
   },
   "1ef87910-4a4c-456c-b5e6-f4b91862b67e": {
-    "asset": 1545043165151,
-    "meta": 1545043165171,
+    "asset": 1545201472667,
+    "meta": 1545201472683,
     "relativePath": "game.fire"
   },
   "0b12596e-b155-49e4-8de0-5fa14060ac32": {
@@ -265,8 +265,8 @@
     "relativePath": "prefab\\webview.prefab"
   },
   "32b1e5fb-2f41-4bff-9339-09ad51ee2258": {
-    "asset": 1544776720463,
-    "meta": 1544776720481,
+    "asset": 1545184184823,
+    "meta": 1545184184836,
     "relativePath": "texttures\\stickPrefab.prefab"
   },
   "2127610d-a05c-4924-9851-6b68e2c583a1": {
@@ -280,8 +280,8 @@
     "relativePath": "texttures\\finger.png"
   },
   "84aef6c6-c8f5-4db8-be4c-46974a10ea21": {
-    "asset": 1545015989134,
-    "meta": 1545015989152,
+    "asset": 1545184175954,
+    "meta": 1545184175972,
     "relativePath": "texttures\\finger.prefab"
   },
   "6872b3a3-7681-49a4-b6ae-cec0f85965c0": {
@@ -305,24 +305,9 @@
     "relativePath": "texttures\\player\\player2.png"
   },
   "cb091df4-2e49-4b19-af21-4441e8dc62a5": {
-    "asset": 1545027025875,
-    "meta": 1545027025895,
+    "asset": 1545184189776,
+    "meta": 1545184189791,
     "relativePath": "texttures\\player.prefab"
-  },
-  "06ac0c84-b502-498e-a384-08660073169d": {
-    "asset": 1545038833610,
-    "meta": 1545038929040,
-    "relativePath": "scripts\\Finger.js"
-  },
-  "b7b0fbb0-3b1d-43d1-8db7-06307782df32": {
-    "asset": 1545041414750,
-    "meta": 1545041416213,
-    "relativePath": "scripts\\Player.js"
-  },
-  "a2b4a69a-8cbd-4342-aaf3-55fe57cb2496": {
-    "asset": 1545041843533,
-    "meta": 1545041876476,
-    "relativePath": "scripts\\Stick.js"
   },
   "437add30-a6fa-4787-bb9a-79c789d37c99": {
     "asset": 1545043157720,
@@ -334,14 +319,34 @@
     "meta": 1545043360851,
     "relativePath": "start.fire"
   },
-  "71d3fbe0-9b3d-4130-8cb7-89afbfe3e813": {
-    "asset": 1545043616290,
-    "meta": 1545043621359,
-    "relativePath": "scripts\\Game.js"
-  },
   "cd9f2588-fc8e-4dfe-b050-1ec7f19e6bc0": {
     "asset": 1545043601401,
     "meta": 1545043621360,
     "relativePath": "scripts\\StartGame.js"
+  },
+  "06ac0c84-b502-498e-a384-08660073169d": {
+    "asset": 1545189174314,
+    "meta": 1545189177256,
+    "relativePath": "scripts\\Finger.js"
+  },
+  "a2b4a69a-8cbd-4342-aaf3-55fe57cb2496": {
+    "asset": 1545189943478,
+    "meta": 1545189945552,
+    "relativePath": "scripts\\Stick.js"
+  },
+  "b7b0fbb0-3b1d-43d1-8db7-06307782df32": {
+    "asset": 1545197814195,
+    "meta": 1545197908533,
+    "relativePath": "scripts\\Player.js"
+  },
+  "585a6a06-0ae5-4d8c-a323-4b122752b035": {
+    "asset": 1545200771858,
+    "meta": 1545200773960,
+    "relativePath": "scripts\\Score.js"
+  },
+  "71d3fbe0-9b3d-4130-8cb7-89afbfe3e813": {
+    "asset": 1545201406778,
+    "meta": 1545201409141,
+    "relativePath": "scripts\\Game.js"
   }
 }
